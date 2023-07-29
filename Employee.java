@@ -10,6 +10,9 @@ public class Employee {
 
     // TODO: Lengkapi constructor
     public Employee(String name, int yearsOfExperience, double salaryMultiplier) {
+        this.name = name;
+        this.yearsOfExperience = yearsOfExperience;
+        this.salaryMultiplier = (int) salaryMultiplier;
     }
 
     public int calculateSalary() {

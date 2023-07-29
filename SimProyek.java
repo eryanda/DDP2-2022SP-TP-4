@@ -175,15 +175,31 @@ public class SimProyek {
     // Silahkan tambahkan method lain yang dirasa dapat membantu
 
     private void printProjectListNumberOnly() {
+        for (int i = 0; i < projectList.size(); i++) {
+            Project project = projectList.get(i);
+            System.out.println(i+1 + ". " + project.getName());
+        }
     }
 
     private void printDivisionDetail(int nomorPilihan) {
+        
     }
 
     private void addEmployee(String namaKaryawan, String jabatan, int lamaBekerja, double bonusGaji, int nomorDivisi) {
     }
 
     private void printProjectList() {
+        for (int i = 0; i < projectList.size(); i++) {
+            Project project = projectList.get(i);
+            System.out.println(i+1 + ". " +  project.getName());
+            if (project.getProjectLeader() != null){
+                System.out.println("   Leader " + project.getProjectLeader().getName());
+            }
+            else{
+                System.out.println("   Leader: Tidak memiliki leader");
+            }
+            System.out.println("   Jumlah anggota:  " + project.getMemberList().size() );
+        }
     }
 
     private void projectDetail(int nomorPilihan) {
@@ -242,16 +258,21 @@ public class SimProyek {
         Employee deni = new Employee("Deni", 3, 0.15);
         Employee tina = new Employee("Tina", 2, 0.1);
 
-        this.employeeList.add(budi);
-        this.employeeList.add(ica);
-        this.employeeList.add(andi);
+        // HRD
+        this.employeeList.add(budi); 
         this.employeeList.add(udin);
         this.employeeList.add(fira);
         this.employeeList.add(opet);
+
+        // Marketing
+        this.employeeList.add(ica);
         this.employeeList.add(mirna);
         this.employeeList.add(asep);
         this.employeeList.add(yudi);
+
+        // Design
         this.employeeList.add(deni);
+        this.employeeList.add(andi);
         this.employeeList.add(tina);
         
         hrd.addEmployee(budi);

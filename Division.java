@@ -7,7 +7,15 @@ public class Division {
 
     // TODO: Lengkapi constructor
     public Division(int baseSalary) {
-        
+        this.baseSalary = baseSalary;
+    }
+
+    public void setBaseSalary(int baseSalary){
+        this.baseSalary = baseSalary;
+    }
+
+    public int getBaseSalary(){
+        return baseSalary;
     }
 
     // TODO: Lengkapi logika untuk menambahkan karyawan
