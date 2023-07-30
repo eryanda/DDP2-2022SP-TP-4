@@ -83,7 +83,7 @@ public class SimProyek {
                     System.out.println("Berikut adalah daftar proyek yang dapat Anda pilih: ");
                     app.printProjectListNumberOnly();
 
-                    System.out.print("Pilih nomor proyek: ");
+                    System.out.print("\nPilih nomor proyek: ");
                     nomorPilihan = scanner.nextInt();
                     scanner.nextLine();
 
@@ -182,11 +182,33 @@ public class SimProyek {
     }
 
     private void printDivisionDetail(int nomorPilihan) {
-        
+        Division division = divisionList.get(nomorPilihan - 1);
+        System.out.println("Divisi " + division.getClass().getSimpleName());
+        System.out.println("Gaji Pokok: " + division.getBaseSalary());
+        System.out.println("Daftar Karyawan:");
+        if (division.getEmployeesList() == null || division.getEmployeesList().isEmpty()) {
+            System.out.println("- Tidak ada karyawan dalam divisi ini");
+        } else {
+            for (Employee employee : division.getEmployeesList()) {
+                System.out.println("- " + employee.getName());
+            }
+        }
     }
 
-    private void addEmployee(String namaKaryawan, String jabatan, int lamaBekerja, double bonusGaji, int nomorDivisi) {
-    }
+        private void addEmployee(String namaKaryawan, String jabatan, int lamaBekerja, double bonusGaji, int nomorDivisi) {
+            Division division = divisionList.get(nomorDivisi - 1);
+            Employee employee;
+            if (jabatan.equalsIgnoreCase("manager")) {
+                employee = new Manager(namaKaryawan, lamaBekerja, bonusGaji);
+            } else if (jabatan.equalsIgnoreCase("intern")) {
+                employee = new Intern(namaKaryawan, lamaBekerja, bonusGaji);
+            } else {
+                employee = new Employee(namaKaryawan, lamaBekerja, bonusGaji);
+            }
+            employee.setDivision(division);
+            employeeList.add(employee);
+            division.addEmployee(employee);
+        }
 
     private void printProjectList() {
         for (int i = 0; i < projectList.size(); i++) {
@@ -198,20 +220,52 @@ public class SimProyek {
             else{
                 System.out.println("   Leader: Tidak memiliki leader");
             }
-            System.out.println("   Jumlah anggota:  " + project.getMemberList().size() );
+            System.out.println("   Jumlah anggota : " + project.getMemberList().size() );
         }
     }
 
     private void projectDetail(int nomorPilihan) {
+        Project project = projectList.get(nomorPilihan - 1);
+        System.out.println("Proyek " + project.getName() + " Detail:");
+        System.out.println("Leader: " + project.getProjectLeader().getName());
+        System.out.println("Anggota:");
+        int i = 1;
+        for (Employee member : project.getMemberList()) {
+            System.out.println(i + ". " + member.getName() + " - Divisi " + member.getDivisionName());
+            i++;
+        }
     }
 
     private void deleteProjectMember(int nomorPilihan, int nomorAnggota) {
+        Project project = projectList.get(nomorPilihan - 1);
+        Employee member = project.getMemberList().get(nomorAnggota - 1);
+        project.removeMember(member);
     }
 
     private void addProjectMember(int nomorPilihan, String namaKaryawan) {
+        Project project = projectList.get(nomorPilihan - 1);
+        Employee employee = null;
+        for (Employee emp : employeeList) {
+            if (emp.getName().equalsIgnoreCase(namaKaryawan)) {
+                employee = emp;
+                break;
+            }
+        }
+        if (employee != null) {
+            project.addMember(employee);
+            System.out.println("Karyawan " + employee.getName() + " berhasil ditambahkan ke dalam " + project.getName());
+        }
     }
 
     private void createProject(String projectName) {
+        Project project = new Project(projectName);
+        if(projectList.contains(project)){
+            System.out.println("\nGagal: "+ projectName + " telah terdaftar di dalam sistem");
+        }
+        else{
+            System.out.println("\nProyek " + projectName + " berhasil ditambahkan ke dalam sistem.");
+            projectList.add(project);
+        }
     }
 
     private void printMenu() {
