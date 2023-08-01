@@ -1,0 +1,7 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "c:\\Users\\eryan\\Downloads\\junit-platform-console-standalone-1.9.1.jar"
+    ],
+    "java.debug.settings.onBuildFailureProceed": true
+}

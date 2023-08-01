@@ -17,7 +17,7 @@ public class SimProyek {
 
         Scanner scanner = new Scanner(System.in);
         int choice;
-        System.out.println("Selamat datang di SimProyek. Berikut adalah daftar proyek yang terdaftar dalam sistem.");
+        System.out.println("\nSelamat datang di SimProyek. Berikut adalah daftar proyek yang terdaftar dalam sistem.\n");
         
         // TODO: Tampilkan daftar proyek, lengkapi kode di dalam method printProjectList()
         app.printProjectList();
@@ -48,7 +48,7 @@ public class SimProyek {
                     System.out.println("Berikut adalah daftar proyek yang dapat Anda pilih: ");
                     app.printProjectListNumberOnly();
 
-                    System.out.print("Pilih nomor proyek: ");
+                    System.out.print("\nPilih nomor proyek: ");
                     nomorPilihan = scanner.nextInt();
                     scanner.nextLine();
 
@@ -119,7 +119,7 @@ public class SimProyek {
                     System.out.println("3. Design");
                     System.out.println("4. Engineer");
 
-                    System.out.print("Pilih divisi: ");
+                    System.out.print("\nPilih divisi: ");
                     nomorPilihan = scanner.nextInt();
                     scanner.nextLine();
 
@@ -145,7 +145,7 @@ public class SimProyek {
                     System.out.println();
                     break;
                 case 8:
-                    System.out.println("Berikut adalah daftar divisi pada sistem SimProyek: ");
+                    System.out.println("\nBerikut adalah daftar divisi pada sistem SimProyek: ");
                     System.out.println("1. HRD");
                     System.out.println("2. Marketing");
                     System.out.println("3. Design");
@@ -156,6 +156,10 @@ public class SimProyek {
                     nomorPilihan = scanner.nextInt();
                     scanner.nextLine();
 
+                    if (nomorPilihan != 1 && nomorPilihan != 2 && nomorPilihan != 3 && nomorPilihan != 4){
+                        System.out.println("\nInput invalid. Kembali ke menu utama. \n");
+                        break;
+                    }
                     // TODO: tampilkan detail divisi
                     app.printDivisionDetail(nomorPilihan);
 
@@ -174,6 +178,9 @@ public class SimProyek {
 
     // Silahkan tambahkan method lain yang dirasa dapat membantu
 
+    /**
+     * Menampilkan daftar proyek beserta nomor urutannya.
+     */
     private void printProjectListNumberOnly() {
         for (int i = 0; i < projectList.size(); i++) {
             Project project = projectList.get(i);
@@ -181,35 +188,55 @@ public class SimProyek {
         }
     }
 
+    /**
+     * Menampilkan detail dari sebuah divisi beserta daftar karyawan yang ada di dalamnya.
+     *
+     * @param nomorPilihan Nomor urutan divisi yang akan ditampilkan detailnya.
+     */
+
     private void printDivisionDetail(int nomorPilihan) {
         Division division = divisionList.get(nomorPilihan - 1);
-        System.out.println("Divisi " + division.getClass().getSimpleName());
+        System.out.println("Divisi " + division.toString());
         System.out.println("Gaji Pokok: " + division.getBaseSalary());
         System.out.println("Daftar Karyawan:");
         if (division.getEmployeesList() == null || division.getEmployeesList().isEmpty()) {
             System.out.println("- Tidak ada karyawan dalam divisi ini");
-        } else {
-            for (Employee employee : division.getEmployeesList()) {
-                System.out.println("- " + employee.getName());
-            }
+        } 
+        else {
+            for (Employee employee : division.getEmployeesList()){
+                System.out.printf("%s - Divisi %s - %d - %s \n", 
+                employee.getName(), division.getClass().getSimpleName(), employee.calculateSalary(), employee.getProjectsString());
+            } 
         }
     }
-
-        private void addEmployee(String namaKaryawan, String jabatan, int lamaBekerja, double bonusGaji, int nomorDivisi) {
-            Division division = divisionList.get(nomorDivisi - 1);
-            Employee employee;
-            if (jabatan.equalsIgnoreCase("manager")) {
-                employee = new Manager(namaKaryawan, lamaBekerja, bonusGaji);
-            } else if (jabatan.equalsIgnoreCase("intern")) {
-                employee = new Intern(namaKaryawan, lamaBekerja, bonusGaji);
-            } else {
-                employee = new Employee(namaKaryawan, lamaBekerja, bonusGaji);
-            }
-            employee.setDivision(division);
-            employeeList.add(employee);
-            division.addEmployee(employee);
+        
+    /**
+     * Menambahkan karyawan ke dalam sistem SimProyek berdasarkan nama, jabatan, lama bekerja, bonus gaji, dan divisi.
+     *
+     * @param namaKaryawan  Nama karyawan.
+     * @param jabatan       Jabatan karyawan (Manager/Intern/other).
+     * @param lamaBekerja   Lama bekerja karyawan (dalam tahun).
+     * @param bonusGaji     Bonus gaji karyawan.
+     * @param nomorDivisi   Nomor urutan divisi tempat karyawan bekerja.
+     */
+    private void addEmployee(String namaKaryawan, String jabatan, int lamaBekerja, double bonusGaji, int nomorDivisi) {
+        Division division = divisionList.get(nomorDivisi - 1);
+        Employee employee;
+        if (jabatan.equalsIgnoreCase("manager")) {
+            employee = new Manager(namaKaryawan, lamaBekerja, bonusGaji);
+        } else if (jabatan.equalsIgnoreCase("intern")) {
+            employee = new Intern(namaKaryawan, lamaBekerja, bonusGaji);
+        } else {
+            employee = new Employee(namaKaryawan, lamaBekerja, bonusGaji);
         }
+        employee.setDivision(division);
+        employeeList.add(employee);
+        division.addEmployee(employee);
+    }
 
+    /**
+     * Menampilkan daftar proyek di SimProyek
+     */
     private void printProjectList() {
         for (int i = 0; i < projectList.size(); i++) {
             Project project = projectList.get(i);
@@ -224,24 +251,59 @@ public class SimProyek {
         }
     }
 
+    /**
+     * Menampilkan detail dari sebuah proyek berdasarkan nomor urutan proyek yang dipilih.
+     *
+     * @param nomorPilihan Nomor urutan proyek yang akan ditampilkan detailnya.
+     */
     private void projectDetail(int nomorPilihan) {
         Project project = projectList.get(nomorPilihan - 1);
-        System.out.println("Proyek " + project.getName() + " Detail:");
-        System.out.println("Leader: " + project.getProjectLeader().getName());
-        System.out.println("Anggota:");
-        int i = 1;
-        for (Employee member : project.getMemberList()) {
-            System.out.println(i + ". " + member.getName() + " - Divisi " + member.getDivisionName());
-            i++;
+        if (project != null) {
+            System.out.println("Nama Proyek: " + project.getName());
+    
+            /* Pastikan leader proyek tidak bernilai null sebelum mengakses method getName() */ 
+            Employee projectLeader = project.getProjectLeader();
+            if (projectLeader != null) {
+                System.out.println("Leader: " + projectLeader.getName() + " - Divisi " + projectLeader.getDivisionName());
+            } 
+            else {
+                System.out.println("Leader: Tidak memiliki leader");
+            }
+            if(project.getMemberList() == null){
+                System.out.println("Anggota: Tidak memiliki anggota");
+            }
+            else{
+                System.out.println("Anggota:");
+                int i = 1;
+                for (Employee member : project.getMemberList()) {
+                    System.out.println(i + ". " + member.getName() + " - Divisi " + member.getDivisionName());
+                    i++;
+                }
+            }
+        } 
+        else {
+            System.out.println("Sistem SimProyek belum memiliki proyek.");
         }
     }
-
+    
+    /**
+     * Menghapus seorang anggota dari sebuah proyek berdasarkan nomor urutan proyek dan nomor urutan anggota.
+     *
+     * @param nomorPilihan Nomor urutan proyek yang akan dihapus anggota dari-nya.
+     * @param nomorAnggota Nomor urutan anggota yang akan dihapus dari proyek.
+     */
     private void deleteProjectMember(int nomorPilihan, int nomorAnggota) {
         Project project = projectList.get(nomorPilihan - 1);
         Employee member = project.getMemberList().get(nomorAnggota - 1);
         project.removeMember(member);
     }
 
+    /**
+     * Menambahkan seorang karyawan sebagai anggota ke dalam sebuah proyek berdasarkan nama proyek dan nama karyawan.
+     *
+     * @param nomorPilihan Nomor urutan proyek yang akan ditambahkan karyawan ke dalam-nya.
+     * @param namaKaryawan Nama karyawan yang akan ditambahkan ke proyek.
+     */
     private void addProjectMember(int nomorPilihan, String namaKaryawan) {
         Project project = projectList.get(nomorPilihan - 1);
         Employee employee = null;
@@ -251,12 +313,17 @@ public class SimProyek {
                 break;
             }
         }
+        project.addMember(employee);
         if (employee != null) {
-            project.addMember(employee);
-            System.out.println("Karyawan " + employee.getName() + " berhasil ditambahkan ke dalam " + project.getName());
+            System.out.println("\nAnda telah memilih " + project.getName() +". "  + "Karyawan " + employee.getName() + " berhasil ditambahkan ke dalam " + project.getName());
         }
     }
 
+    /**
+     * Membuat proyek baru dalam sistem SimProyek berdasarkan nama proyek.
+     *
+     * @param projectName Nama proyek yang akan dibuat.
+     */
     private void createProject(String projectName) {
         Project project = new Project(projectName);
         if(projectList.contains(project)){
@@ -279,7 +346,7 @@ public class SimProyek {
         System.out.println("7. Daftar karyawan      ");
         System.out.println("8. Detail divisi        ");
         System.out.println("99. Keluar              ");
-        System.out.print("Pilih menu: ");
+        System.out.print("\nPilih menu: ");
     }
 
     private void mockDivisionData() {
@@ -292,6 +359,10 @@ public class SimProyek {
         divisionList.add(marketing);
         divisionList.add(design);
         divisionList.add(engineering);
+
+        for (Division division : divisionList) {
+            System.out.println(division + " \n");
+        }
     }
 
     private void mockData() {
@@ -329,17 +400,17 @@ public class SimProyek {
         this.employeeList.add(andi);
         this.employeeList.add(tina);
         
-        hrd.addEmployee(budi);
+        hrd.addEmployee(budi); //Manajer
         hrd.addEmployee(udin);
         hrd.addEmployee(fira);
         hrd.addEmployee(opet);
 
-        marketing.addEmployee(ica);
+        marketing.addEmployee(ica); //Manajer
         marketing.addEmployee(mirna);
         marketing.addEmployee(asep);
         marketing.addEmployee(yudi);
 
-        design.addEmployee(andi);
+        design.addEmployee(andi); //Manajer
         design.addEmployee(deni);
         design.addEmployee(tina);
 
@@ -364,5 +435,17 @@ public class SimProyek {
         this.projectList.add(ufoProject);
         this.projectList.add(saladProject);
         this.projectList.add(compfestProject);
+
+        System.out.println();
+        for (Division division : divisionList) {
+            System.out.println(division + " \n");
+        }
+
+        System.out.println();
+        for (Employee empl : employeeList) {
+            System.out.println(empl + " \n");
+        }
+
+    System.out.println();
     }
 }
